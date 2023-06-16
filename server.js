@@ -5,18 +5,16 @@ import morgan  from 'morgan'
 import connectDB from './config/db.js'
 import authRoutes from './routes/authRoute.js'
 dotenv.config()
-
-//rouutes
-app.use('/api/v1/auth',authRoutes)
-//connect db
-
 //rest object
 const app=express()
 //use of middlewares
 app.use(express.json())
 app.use(morgan('dev'))
-
+//connect db
 connectDB();
+//rouutes
+app.use('/api/v1/auth',authRoutes)
+
 //rest api calling
 const PORT = process.env.PORT||8080
 app.get("/",(req,res)=>{
