@@ -8,6 +8,6 @@ try {
     console.log(`${error}`)
 }
 }
-export const comparePassword=()=>{
-   return bcrypt.compare(password,hashPassword)
+export const comparePassword=async (password,hashedPassword)=>{
+   return bcrypt.compare(password,hashedPassword)
 }
