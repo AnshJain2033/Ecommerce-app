@@ -27,6 +27,7 @@ const userSchema = mongoose.Schema({
     },
     role:{
         type:Number,
+       
         defualt:0
         
     }

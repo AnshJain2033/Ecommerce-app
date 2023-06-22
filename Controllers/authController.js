@@ -6,19 +6,19 @@ try {
     
     const {name,email,Address,phoneNumber,password,role}=req.body
     if(!name){
-        return res.send('Name is required')
+        return res.send({message:'Name is required'})
     }
     if(!email){
-        return res.send('Email is required')
+        return res.send({message:'Email is required'})
     }
     if(!Address){
-        return res.send('Address is required')
+        return res.send({message:'Address is required'})
     }
     if(!phoneNumber){
-        return res.send('phone Number is required')
+        return res.send({message:'phone Number is required'})
     }
     if(!password){
-        return res.send('password is required')
+        return res.send({message:'password is required'})
     }  
    
     //check for existing user
@@ -26,7 +26,7 @@ try {
 
     if(existingUser){
         return res.status(200).send({
-            success:true,
+            success:false,
             message:'Already a user Please Login'
         })
     }
@@ -103,4 +103,10 @@ export const loginController =async(req,res)=>{
             error
         })
     }
+}
+export const testController= (req,res)=>{
+   return res.send({
+    success:true,
+    message:"Token is working"
+   })
 }
