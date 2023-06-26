@@ -11,13 +11,17 @@ const Register = () => {
     const [email, setEmail] = useState("")
     const [phoneNumber, setPhoneNumber] = useState("")
     const [Address, setAddress] = useState("")
+    const [answer, setAnswer] = useState("")
+    const [role, setRole] = useState("0")
     const [password, setPassword] = useState("")
     const navigate =useNavigate()
     //Handle Submit of Form
     const handleSubmit= async (e)=>{
+        
         e.preventDefault()
+        
         try {
-            const res =await axios.post(`${process.env.REACT_APP_API}/api/v1/auth/register`,{name,email,phoneNumber,Address,password})
+            const res =await axios.post(`${process.env.REACT_APP_API}/api/v1/auth/register`,{name,email,phoneNumber,Address,password,answer,role})
             if(res.data.success){
                 setTimeout(()=>{
                     toast.success(res.data.message)
@@ -52,6 +56,10 @@ const Register = () => {
         
             <input required type="email" onChange={(e)=>setEmail(e.target.value)} value={email} className="form-control" id="exampleInputEmail" placeholder='Enter Email' />
         </div>
+        <div className="mb-3">
+        
+        <input required type="text" onChange={(e)=>setAnswer(e.target.value)} value={answer} className="form-control" id="exampleInputAnswer" placeholder='What is your school name' />
+    </div>
         <div className="mb-3">
            
             <input required type="text" onChange={(e)=>setAddress(e.target.value)} value={Address} className="form-control" id="exampleInputAddress" placeholder='Enter Address'/>

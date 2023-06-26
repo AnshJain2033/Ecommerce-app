@@ -25,10 +25,14 @@ const userSchema = mongoose.Schema({
         required:true
         
     },
+    answer:{
+        type:String,
+        required:true,
+        
+    },
     role:{
         type:Number,
-       
-        defualt:0
+        defualt:"0",
         
     }
     

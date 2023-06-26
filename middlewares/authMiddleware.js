@@ -14,12 +14,17 @@ export const isAdmin =async(req,res,next)=>{
     try {
         const user=await userModel.findById(req.user._id)
         if(user.role!==1){
-            return res.status(401).send({
+            // changed from 401
+            return res.status(201).send({
                 success:false,
                 message:"Unauthorized Access"
-            })
+            
+            });
         }
-        next()
+        else{
+            next()
+        }
+      
     } catch (error) {
         console.log(error)
         res.status(401).send({
