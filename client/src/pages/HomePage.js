@@ -8,15 +8,17 @@ import { Checkbox, Radio } from 'antd'
 import { Prices } from '../components/layout/Routes/Prices'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { Space, Spin } from 'antd';
+import { useNavigate } from 'react-router-dom'
+import { useCart } from '../context/Cart'
 function HomePage() {
-
+  const navigate = useNavigate()
   const [products, setProducts] = useState([])
   const [categories, setCategories] = useState([])
   const [checked, setChecked] = useState([])
   const [radio, setRadio] = useState([])
   const [total, setTotal] = useState(0)
   const [page, setPage] = useState(1)
-
+  const [cart, setCart] = useCart()
 
   //fetch More data
   const fetchMoreData = async () => {
@@ -121,71 +123,82 @@ function HomePage() {
   return (
 
     <Layout title={'All Products - Best Offers'}>
-      <div className='row mt-3'>
-        <div className='col-md-3'>
-          <h4 className='text-center'>Filter By Category</h4>
-          <div className='d-flex flex-column m-4'>
-            {categories?.map((c) => (
-              <Checkbox key={c._id} onChange={(e) => { handleFilter(e.target.checked, c._id) }}>{c.name}</Checkbox>
-            ))}
-          </div>
-
-          <h4 className='text-center mt-4'>Filter By Price</h4>
-          <div className='d-flex flex-column m-4'>
-            <Radio.Group onChange={(e) => { setRadio(e.target.value) }}>
-              {Prices?.map((p) => (
-                <div key={p._id}>
-                  <Radio value={p.array}>{p.name}</Radio>
-                </div>
+      <div className='container'>
+        <div className='row mt-3'>
+          <div className='col-md-2'>
+            <h4 className='text-center'>Filter By Category</h4>
+            <div className='d-flex flex-column m-4'>
+              {categories?.map((c) => (
+                <Checkbox key={c._id} onChange={(e) => { handleFilter(e.target.checked, c._id) }}>{c.name}</Checkbox>
               ))}
-            </Radio.Group>
-          </div>
-          <div className='d-flex flex-column m-4'>
-            <button className='btn btn-danger' onClick={() => window.location.reload()}>Reset Filters</button>
-          </div>
+            </div>
 
-        </div>
-        <div className='col-md-9'>
-
-          <h1 className='text-center'>All Products</h1>
-          <div className='d-flex flex-wrap'>
-            <InfiniteScroll
-              dataLength={products.length}
-              next={fetchMoreData}
-              hasMore={products.length != total}
-            // loader={<Space size={"middle"}><Spin size={'large'} /></Space>}
-            >
-              <div className='d-flex flex-wrap'>
-
-                {products?.map((p) =>
-                (
-                  <div className='card m-2' key={p._id} style={{ width: '18rem' }}>
-                    <img
-                      src={`${process.env.REACT_APP_API}/api/v1/product/product-photo/${p._id}`}
-                      className='card-img-top'
-                      alt={p.name}
-                    />
-                    <div className='card-body'>
-                      <h5 className='card-title'>{p.name}</h5>
-                      <p className='card-description'>{p.description.substring(0, 60)}</p>
-                      <p className='card-price'>Price :: {p.price}$</p>
-                      <button className='btn btn-primary ms-2'>More Details</button>
-                      <button className='btn btn-secondary ms-2'>Add To Cart</button>
-                    </div>
-
+            <h4 className='text-center mt-4'>Filter By Price</h4>
+            <div className='d-flex flex-column m-4'>
+              <Radio.Group onChange={(e) => { setRadio(e.target.value) }}>
+                {Prices?.map((p) => (
+                  <div key={p._id}>
+                    <Radio value={p.array}>{p.name}</Radio>
                   </div>
-                )
-                )}
+                ))}
+              </Radio.Group>
+            </div>
+            <div className='d-flex flex-column m-4'>
+              <button className='btn btn-danger' onClick={() => window.location.reload()}>Reset Filters</button>
+            </div>
 
-
-
-              </div>
-            </InfiniteScroll>
           </div>
-        </div>
-      </div>
+          <div className='col-md-10'>
 
-    </Layout>
+            <h1 className='text-center'>All Products</h1>
+            <div className='d-flex flex-wrap'>
+              <InfiniteScroll
+                dataLength={products.length}
+                next={fetchMoreData}
+                hasMore={products.length != total}
+              // loader={<Space size={"middle"}><Spin size={'large'} /></Space>}
+              >
+                <div className='d-flex flex-wrap'>
+
+                  {products?.map((p) =>
+                  (
+                    <div className='card m-2' key={p._id} style={{ width: '18rem' }}>
+                      <img
+                        src={`${process.env.REACT_APP_API}/api/v1/product/product-photo/${p._id}`}
+                        className='card-img-top'
+                        alt={p.name}
+                      />
+                      <div className='card-body'>
+                        <h5 className='card-title'>{p.name}</h5>
+                        <p className='card-description'>{p.description.substring(0, 60)}</p>
+                        <p className='card-price'>Price :: {p.price}$</p>
+                        <button className='btn btn-primary ms-2' onClick={() => { navigate(`/product/${p.slug}`) }}>More Details</button>
+                        <button className='btn btn-secondary ms-2' onClick={() => {
+                          setCart([...cart, p]);
+                          localStorage.setItem(
+                            'cart',
+                            JSON.stringify([...cart, p])
+                          )
+                          setTimeout(() => {
+                            toast.success('Item Added To Cart')
+                          }, 1000);
+                        }
+                        }>Add To Cart</button>
+                      </div>
+
+                    </div>
+                  )
+                  )}
+
+
+
+                </div>
+              </InfiniteScroll>
+            </div>
+          </div>
+        </div >
+      </div>
+    </Layout >
 
   )
 }

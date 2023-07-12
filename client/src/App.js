@@ -21,14 +21,22 @@ import Orders from "./pages/User/orders";
 import Profile from "./pages/User/profile";
 import Products from "./pages/Admin/Products";
 import UpdateProduct from "./pages/Admin/UpdateProduct";
+import Search from "./pages/Search";
+import ProductDetail from "./pages/ProductDetail";
+import Categories from "./pages/Categories.js";
+import CategoryProduct from "./pages/CategoryProduct";
+import CartPage from "./pages/CartPage";
 function App() {
   return (
     <>
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/categories" element={<Categories />} />
+        <Route path="/cart" element={<CartPage />} />
+        <Route path="/category/:slug" element={<CategoryProduct />} />
         <Route path="/Register" element={<Register />} />
-
-
+        <Route path="/search" element={<Search />} />
+        <Route path="/product/:slug" element={<ProductDetail />} />
         <Route path="/dashboard" element={<PrivateRoutes />}>
           <Route path="user" element={<Dashboard />} />
           <Route path="user/profile" element={<Profile />} />

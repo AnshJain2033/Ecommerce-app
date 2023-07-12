@@ -1,6 +1,7 @@
 import slugify from "slugify"
 import productModel from "../models/productModel.js"
 import fs from 'fs'
+import categoryModel from "../models/categoryModel.js"
 export const createProductController = async (req, res) => {
     try {
         const { name, slug, description, quantity, price, category, shipping } = req.fields
@@ -225,7 +226,7 @@ export const productListController = async (req, res) => {
 export const searchController = async (req, res) => {
     try {
         const { keyword } = req.params
-        const result = await axios.productModel.find({
+        const result = await productModel.find({
             $or: [
                 { name: { $regex: keyword, $options: 'i' } },
                 { description: { $regex: keyword, $options: 'i' } }
@@ -238,6 +239,55 @@ export const searchController = async (req, res) => {
         res.status(400).send({
             success: false,
             message: 'Error In searching the Products',
+            error
+        })
+    }
+}
+
+// get related products ||GET
+export const relatedProductController = async (req, res) => {
+    try {
+        const { pid, cid } = req.params
+        const product = await productModel.find({
+            category: cid,
+            _id: { $ne: pid },
+        }).select('-photo')
+            .limit(3)
+            .populate("category")
+        res.status(200).send({
+            message: "Related Products Fetched Successfully",
+            success: true,
+            product
+        })
+    } catch (error) {
+        console.log(error)
+        res.status(400).send({
+            message: 'Error in fetching related products',
+            success: false,
+            error
+        })
+    }
+}
+
+
+//Product Category Controller || GET product by category
+export const productCategoryController = async (req, res) => {
+    try {
+        const category = await categoryModel.findOne({ slug: req.params.slug })
+        const products = await productModel.find({
+            category: category
+        }).populate('category').select('-photo')
+        res.status(200).send({
+            success: true,
+            message: 'Fetched All products of this category',
+            products,
+            category
+        })
+    } catch (error) {
+        console.log(error)
+        res.status(400).send({
+            success: false,
+            message: 'Error in getting Product of this category',
             error
         })
     }
