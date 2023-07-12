@@ -4,11 +4,26 @@ import { useCart } from '../context/Cart'
 import { useAuth } from '../context/auth'
 import { useNavigate } from 'react-router-dom'
 import { Button } from 'antd'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
+import DropIn from "braintree-web-drop-in-react";
 const CartPage = () => {
     const [cart, setCart] = useCart()
     const [auth, setAuth] = useAuth()
+    const [clientToken, setClientToken] = useState('')
+    const [instance, setInstance] = useState('')
+    const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
 
+
+    //handle payment
+    const handlePayment = () => {
+        try {
+
+        } catch (error) {
+
+        }
+    }
     //total price calculator
     const totalCalculator = () => {
         try {
@@ -79,6 +94,44 @@ const CartPage = () => {
                         <hr />
                         <p>Total | Checkout | Payment</p>
                         <h4>Total Amount :: {totalCalculator()} </h4>
+                        {auth?.user?.Address ? (
+                            <>
+                                <div className='mb-3'>
+                                    <h4 >Current Address::<h5 >{auth?.user?.Address}</h5></h4>
+
+                                    <button className='btn btn-outline-warning'
+                                        onClick={() => navigate('/dashboard/user/profile')}
+                                    >Update Address</button>
+                                </div>
+                            </>
+                        ) : (
+                            <div className='mb-3'>
+                                {auth?.token ? (
+                                    <button className='btn btn-outline-warning'
+                                        onClick={() => navigate('/dashboard/user/profile')}
+                                    >Update Address</button>
+                                ) : (
+                                    <button className='btn btn-outline-warning'
+                                        onClick={() => navigate('/login', { state: '/cart' })}
+                                    >Please Login To Checkout</button>
+                                )}
+                            </div>
+
+                        )
+
+                        }
+                        <div className='mt-2'>
+                            <DropIn
+                                options={{
+                                    authorization: clientToken,
+                                    paypal: {
+                                        flow: 'vault',
+                                    }
+                                }}
+                                onInstance={instance => { setInstance(instance) }}
+                            />
+                            <button className='btn btn-outline-primary' onClick={handlePayment}>Make Payment</button>
+                        </div>
                     </div>
                 </div>
             </div>
