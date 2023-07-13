@@ -10,6 +10,7 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import { Space, Spin } from 'antd';
 import { useNavigate } from 'react-router-dom'
 import { useCart } from '../context/Cart'
+import '../style/Homepage.css'
 function HomePage() {
   const navigate = useNavigate()
   const [products, setProducts] = useState([])
@@ -123,10 +124,16 @@ function HomePage() {
   return (
 
     <Layout title={'All Products - Best Offers'}>
-      <div className='container'>
+      <img
+        src="/images/AnimatedBanner.gif"
+        className="banner-img"
+        alt="bannerimage"
+        width={"100%"}
+      />
+      <div className='container home-page'>
         <div className='row mt-3'>
-          <div className='col-md-2'>
-            <h4 className='text-center'>Filter By Category</h4>
+          <div className='col-md-2 filters'>
+            <h5 className='text-center'>Filter By Category</h5>
             <div className='d-flex flex-column m-4'>
               {categories?.map((c) => (
                 <Checkbox key={c._id} onChange={(e) => { handleFilter(e.target.checked, c._id) }}>{c.name}</Checkbox>
@@ -150,7 +157,7 @@ function HomePage() {
           </div>
           <div className='col-md-10'>
 
-            <h1 className='text-center'>All Products</h1>
+
             <div className='d-flex flex-wrap'>
               <InfiniteScroll
                 dataLength={products.length}

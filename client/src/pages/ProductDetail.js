@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom'
 import Layout from '../components/layout/Layout'
 import { useNavigate } from 'react-router-dom'
 import { useCart } from '../context/Cart'
+import '../style/ProductDetailStyle.css'
 const ProductDetail = () => {
     const params = useParams()
     const [product, setProduct] = useState({})
@@ -47,7 +48,7 @@ const ProductDetail = () => {
     return (
         <>
             <Layout>
-                <div className='container'>
+                <div className='container product-details'>
                     <div className='row container mt-2'>
                         <div className='col-md-6'>
                             <img
@@ -58,7 +59,7 @@ const ProductDetail = () => {
                                 alt={product.name}
                             />
                         </div>
-                        <div className='col-md-6'>
+                        <div className='col-md-6 product-details-info'>
                             <h1 className='text-center'>Product Detail</h1>
                             <h6>Name: {product.name}</h6>
                             <h6>Description: {product.description}</h6>
@@ -80,7 +81,7 @@ const ProductDetail = () => {
                         </div>
                     </div>
                     <hr />
-                    <div className='row'>
+                    <div className='row similar-products'>
                         <h4>Similar Products</h4>
                         {relatedProduct.length < 1 && <p className='text-center'>No Related Product Found</p>}
                         <div className='d-flex flex-wrap'>

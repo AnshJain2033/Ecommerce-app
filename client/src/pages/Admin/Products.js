@@ -40,39 +40,43 @@ const Products = () => {
         getAllProducts()
     }, [])
     return (
-        <div>
 
-            <Layout>
-                <div className='row'>
-                    <div className='col-md-3'>
-                        <AdminMenu />
-                    </div>
-                    <div className='col-md-9'>
-                        <h4>All Products Listed</h4>
+        <Layout>
+            <div>
+                <div className='container-fluid m-3 p-3'>
+
+                    <div className='row'>
                         <div className='col-md-3'>
-                            <List>
-                                {products?.map((p) =>
-                                (
-                                    <Link key={p._id} to={`/dashboard/admin/product/${p.slug}`} className='product-link'>
-                                        <List.Item>
-                                            < Card
-                                                title={p.name}
-                                                cover={< Image src={`${process.env.REACT_APP_API}/api/v1/product/product-photo/${p._id}`
-                                                } />}>
-                                                {p.description}
-                                            </Card>
-                                        </List.Item>
-                                    </Link>
+                            <AdminMenu />
+                        </div>
+                        <div className='col-md-9'>
+                            <h4>All Products Listed</h4>
+                            <div className='col-md-3'>
+                                <List>
+                                    {products?.map((p) =>
+                                    (
+                                        <Link key={p._id} to={`/dashboard/admin/product/${p.slug}`} className='product-link'>
+                                            <List.Item>
+                                                < Card
+                                                    title={p.name}
+                                                    cover={< Image src={`${process.env.REACT_APP_API}/api/v1/product/product-photo/${p._id}`
+                                                    } />}>
+                                                    {p.description}
+                                                </Card>
+                                            </List.Item>
+                                        </Link>
 
-                                )
-                                )}
-                            </List>
+                                    )
+                                    )}
+                                </List>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </Layout >
+            </div >
+        </Layout >
 
-        </div >
+
     )
 }
 

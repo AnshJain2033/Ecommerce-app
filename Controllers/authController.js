@@ -1,6 +1,7 @@
 import userModel from '../models/userModel.js'
 import { comparePassword, hashPassword } from '../helpers/authHelper.js'
 import JWT from 'jsonwebtoken'
+import orderModel from '../models/orderModel.js'
 export const registerController = async (req, res) => {
     try {
 
@@ -177,6 +178,54 @@ export const updateProfileController = async (req, res) => {
         res.status(400).send({
             success: false,
             message: 'Error in Updating the profile',
+            error
+        })
+    }
+}
+
+//Get ordered Products By single User
+export const getOrdersController = async (req, res) => {
+    try {
+        const orders = await orderModel.find({ buyer: req.user._id })
+            .populate('products', '-photo').populate('buyer', 'name')
+        res.json(orders)
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({
+            success: false,
+            message: 'Error in Fetching orders',
+            error
+        })
+    }
+}
+//Get ordered Products by all users to the admin
+export const getAllOrdersController = async (req, res) => {
+    try {
+        const orders = await orderModel.find({})
+            .populate('products', '-photo').populate('buyer', 'name').sort({ createdAt: '-1' })
+        res.json(orders)
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({
+            success: false,
+            message: 'Error in Fetching orders',
+            error
+        })
+    }
+}
+
+// controller to set order status
+export const orderStatusController = async (req, res) => {
+    try {
+        const { orderId } = req.params
+        const { status } = req.body
+        const orders = await orderModel.findByIdAndUpdate(orderId, { status }, { new: true })
+        res.json(orders)
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({
+            success: false,
+            message: 'Error In Setting Order Status',
             error
         })
     }

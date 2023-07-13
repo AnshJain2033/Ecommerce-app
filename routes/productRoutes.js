@@ -30,8 +30,8 @@ router.get('/related-product/:pid/:cid', relatedProductController)
 router.get('/product-category/:slug', productCategoryController)
 //PAYMENT GATEWAY
 //payment token from braintree
-router.get('braintree/token', braintreeTokenController)
+router.get('/braintree/token', braintreeTokenController)
 //payments
-router.post('braintree/payment', requireSignIn, braintreePaymentController)
+router.post('/braintree/payment', requireSignIn, braintreePaymentController)
 
 export default router
